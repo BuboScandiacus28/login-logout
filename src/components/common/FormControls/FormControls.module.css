@@ -1,0 +1,22 @@
+.form_control.error input,
+.form_control.error textarea {
+    border: 1px solid red;
+}
+
+.form_control.error p {
+    background-color: rgb(177, 57, 57);
+    border: 1px solid red;
+
+    flex-basis: 100%;
+}
+
+.form_control > input[type="checkbox"] {
+    margin: 0;
+}
+
+.form_control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,14 @@
+.root {
+    display: flex;
+    justify-content: flex-start;
+    margin: 4rem auto;
+}
+
+.line {
+    height: auto;
+    width: 1px;
+
+    background-color: #ba7338;
+
+    margin: 0 1.5rem 0 1.1rem;
+}

@@ -1,0 +1,44 @@
+.login_form {
+    max-width: 30rem;
+    margin: auto;
+}
+
+.login_form button, .login_form input{
+    margin-top: 2rem;
+
+    padding: 0.8rem 1rem;
+
+    border: 2px solid #ba7338;
+    border-radius: 10px;
+
+    background-color: #d5b08d;
+    color: #ba7338;
+
+    min-width: 100%;
+
+    box-sizing: border-box;
+
+    font-size: 1.2rem;
+}
+
+.login_form button {
+    font-size: 1.5rem;
+}
+
+.login_form input::-webkit-input-placeholder {
+    color: #ba7338;
+}
+.login_form input:-moz-placeholder {
+    color: #ba7338;
+}
+
+.href {
+    font-size: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+
+    margin-top: 3rem;
+
+    color: #ba7338;
+}
