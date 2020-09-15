@@ -2,7 +2,6 @@ import {authAPI} from "../api/api";
 
 let initialState = {
     access_token: null,
-    refresh_token: null,
     isAuth: false,
 };
 
@@ -13,7 +12,6 @@ export const setUserData = (access_token, refresh_token) => ({
     type: SET_USER_DATA,
     tokens: {
         access_token,
-        refresh_token,
     }
 });
 
@@ -24,14 +22,14 @@ export const setAuth = (isAuth) => ({
 
 //Thunks level
 
-export const checkAuthTh = (access_token, refresh_token) => async (dispatch) => {
+export const checkAuthTh = (access_token) => async (dispatch) => {
     let data = await authAPI.me(access_token);
 
     debugger;
     if (data.statusCode === 200) {
         dispatch(setAuth(true));
     } else {
-        dispatch(refreshAuthTh(refresh_token));
+        dispatch(refreshAuthTh());
     }
 };
 
@@ -40,8 +38,8 @@ export const refreshAuthTh = (refresh_token) => async (dispatch) => {
 
     debugger;
     if (data.statusCode === 200) {
-        dispatch(setUserData(data.body.access_token, data.body.refresh_token));
-        dispatch(checkAuthTh());
+        dispatch(setUserData(data.body.access_token));
+        dispatch(checkAuthTh(data.body.access_token));
     } else {
         dispatch(setUserData(null, null));
         dispatch(setAuth(false));
@@ -53,8 +51,8 @@ export const loginTh = (email, password) => async (dispatch) => {
 
     if (data.statusCode === 200) {
         //debugger;
-        dispatch(setUserData(data.body.access_token, data.body.refresh_token));
-        dispatch(checkAuthTh(data.body.access_token, data.body.refresh_token));
+        dispatch(setUserData(data.body.access_token));
+        dispatch(refreshAuthTh(data.body.access_token));
     }
 };
 

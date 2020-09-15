@@ -1,6 +1,6 @@
 import * as axios from 'axios';
 
-const instance = axios.create({
+let instance = axios.create({
     baseURL: "http://142.93.134.108:1111/",
 });
 
@@ -18,6 +18,9 @@ export const authAPI = {
     login(email, password) {
         return instance.post(`login?email=${email}&password=${password}`)
             .then(response => {
+
+                instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.body.refresh_token;
+
                 return (response.data);
             });
     },
@@ -30,13 +33,10 @@ export const authAPI = {
                 return (response.data);
             });
     },
-    refresh(token) {
-        return instance.post(`refresh`, null, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }  
-            })
+    refresh() {
+        return instance.post(`refresh`, null, {})
             .then(response => {
+                  
                 return (response.data);
             });
     }
