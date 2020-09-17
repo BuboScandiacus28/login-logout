@@ -8,7 +8,14 @@ const instance = axios.create({
 });
 
 // Response interceptor for API calls
-instance.interceptors.response.use((response) => {
+instance.interceptors.response.use( async (response) => {
+    //console.log(response);
+    let data = response;
+
+    if (response.data.body.code === 1004) {
+        await refreshAccessToken();
+        data = await authAPI.me();
+    }
 
     if (
         (response.config.url.split('?')[0] === 'login' || response.config.url === 'refresh') &&
@@ -17,19 +24,12 @@ instance.interceptors.response.use((response) => {
         const keys = response.data.body
         localStorage.setItem('refresh', keys.refresh_token);
         localStorage.setItem('access', keys.access_token);
+        //if (response.config.url.split('?')[0] === 'login') localStorage.setItem('access', 'asd'+keys.access_token);
     }
 
-    return response
-}, async function (error) {
-    const originalRequest = error.config;
-    if (error.response.status === 403 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        await refreshAccessToken();
-        const access_token = localStorage.getItem('access');
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-        return instance(originalRequest);
-    }
-    return Promise.reject(error);
+    return data
+}, function (error) {
+    Promise.reject(error);
 });
 
 instance.interceptors.request.use(
@@ -49,6 +49,8 @@ instance.interceptors.request.use(
 
 export let refreshAccessToken = async () => {
 
+    console.log('error');
+
     let data = await authAPI.refresh();
 
     if (data.statusCode === 200) {
@@ -60,7 +62,7 @@ export const authAPI = {
     me() {
         return instance.get(`me`, {})
             .then(response => {
-                return (response.data);
+                return (response);
             });
     },
     login(email, password) {

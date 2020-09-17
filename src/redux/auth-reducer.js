@@ -1,4 +1,4 @@
-import {authAPI, refreshAccessToken} from "../api/api";
+import {authAPI} from "../api/api";
 
 let initialState = {
     isAuth: false,
@@ -17,7 +17,7 @@ export const checkAuthTh = () => async (dispatch) => {
     let data = await authAPI.me();
 
     //debugger;
-    if (data.statusCode === 200) {
+    if (data.data.statusCode === 200) {
         dispatch(setAuth(true));
     }
 };
