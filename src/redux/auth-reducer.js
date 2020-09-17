@@ -25,16 +25,18 @@ export const checkAuthTh = () => async (dispatch) => {
 export const loginTh = (email, password) => async (dispatch) => {
     let data = await authAPI.login(email, password);
 
+    //debugger;
     if (data.statusCode === 200) {
         dispatch(checkAuthTh());
 
-        data = refreshAccessToken();
+        //data = refreshAccessToken();
     }
 };
 
 export const signUpTh = (email, password) => async (dispatch) => {
     let data = await authAPI.signUp(email, password);
     
+    //debugger;
     if (data.status === 'Ok') {
         //debugger;
         dispatch(loginTh(email, password));
