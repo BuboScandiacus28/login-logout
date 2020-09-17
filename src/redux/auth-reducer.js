@@ -16,7 +16,7 @@ export const setAuth = (isAuth) => ({
 export const checkAuthTh = () => async (dispatch) => {
     let data = await authAPI.me();
 
-    debugger;
+    //debugger;
     if (data.statusCode === 200) {
         dispatch(setAuth(true));
     }

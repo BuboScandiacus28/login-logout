@@ -24,25 +24,7 @@ instance.interceptors.response.use((response) => {
 
 export let refreshAccessToken = async () => {
 
-    instance.interceptors.request.use(
-        config => {
-            config.headers.Authorization = `Bearer ${localStorage.getItem('refresh')}`;
-            //debugger;
-            //console.log(config);
-            return config;
-        },
-        error => {
-            Promise.reject(error)
-        }
-    );
-
-    instance.defaults.headers['Authorization'] = 'Bearer ' + localStorage.getItem('refresh');
-
-    console.log(localStorage.getItem('refresh'));
-
     let data = await authAPI.refresh();
-
-    debugger;
 
     if (data.statusCode === 200) {
         return data.body.access_token;
@@ -62,9 +44,12 @@ export const authAPI = {
 
                 instance.interceptors.request.use(
                     config => {
-                        const keys = response.data.body
-                        config.headers.Authorization = `Bearer ${keys.access_token}`;
-                        localStorage.setItem('refresh', keys.refresh_token);
+                        if (config.url === 'refresh') config.headers.Authorization = `Bearer ${localStorage.getItem('refresh')}`;
+                        else {
+                            const keys = response.data.body
+                            config.headers.Authorization = `Bearer ${keys.access_token}`;
+                            localStorage.setItem('refresh', keys.refresh_token);
+                        }
                         return config;
                     },
                     error => {
